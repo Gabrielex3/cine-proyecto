@@ -30,7 +30,7 @@ public class movieService {
         try {
             log.info("Iniciando creacion de pelicula con titulo {}", dto.getTitulo());
             Movie movie = new Movie();
-            movie.setTitle(dto.getTitulo());
+            movie.setTitulo(dto.getTitulo());
             movie.setGenero(dto.getGenero());
             movie.setDuracion(dto.getDuracion());
 
@@ -49,7 +49,7 @@ public class movieService {
 
             Movie existingMovie = getMovieById(id);
 
-            existingMovie.setTitle(dto.getTitulo());
+            existingMovie.setTitulo(dto.getTitulo());
             existingMovie.setGenero(dto.getGenero());
             existingMovie.setDuracion(dto.getDuracion());
 

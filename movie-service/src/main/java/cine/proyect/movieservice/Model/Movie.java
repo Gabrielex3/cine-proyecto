@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "MOVIES")
+@Table(name = "movies")
 @Data
 public class Movie {
 
@@ -14,7 +14,7 @@ public class Movie {
     private long id;
 
     @Column(nullable = false, unique = true)
-    private String title;
+    private String titulo;
 
     @Column(nullable = false)
     private String genero;

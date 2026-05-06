@@ -39,8 +39,8 @@ public class ShowtimeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void>eliminar(@PathVariable Long id){
-        showtimeService.eliminar(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        showtimeService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 }

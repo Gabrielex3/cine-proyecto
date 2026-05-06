@@ -29,8 +29,21 @@ public class ShowtimeService {
         return showtimeRepository.findAll();
     }
 
-    public void eliminar(Long id) {
-        showtimeRepository.deleteById(id);
+    public void deleteUser(Long id) {
+        log.info("Iniciando proceso de eliminación para el ID: {}", id);
+
+        if (!showtimeRepository.existsById(id)) {
+            log.error("Fallo al eliminar: El ID {} no existe", id);
+            throw new RuntimeException("No se puede eliminar: Usuario con ID " + id + " no existe");
+        }
+
+        try {
+            showtimeRepository.deleteById(id);
+            log.info("Usuario con ID {} eliminado exitosamente", id);
+        } catch (Exception e) {
+            log.error("Error al eliminar el usuario ID {}: {}", id, e.getMessage());
+            throw new RuntimeException("Error al intentar borrar el registro de la base de datos.");
+        }
     }
 
     public Showtime buscarPorId(Long id) {

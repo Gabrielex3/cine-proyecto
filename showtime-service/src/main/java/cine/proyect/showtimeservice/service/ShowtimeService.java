@@ -1,32 +1,73 @@
 package cine.proyect.showtimeservice.service;
 
+import cine.proyect.showtimeservice.Client.movieClient;
+import cine.proyect.showtimeservice.Client.roomClient;
 import cine.proyect.showtimeservice.dto.ShowtimeRequestDTO;
+import cine.proyect.showtimeservice.dto.movieDTO;
+import cine.proyect.showtimeservice.dto.roomDTO;
 import cine.proyect.showtimeservice.model.Showtime;
-import cine.proyect.showtimeservice.repository.ShowtimeRepository; // <--- AGREGA ESTO
+import cine.proyect.showtimeservice.repository.ShowtimeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ShowtimeService {
-    private final ShowtimeRepository showtimeRepository;
+    @Autowired
+    private ShowtimeRepository showtimeRepository;
+    @Autowired
+    private movieClient movieClient;
+    @Autowired
+    private roomClient roomClient;
 
-    public Showtime crearFuncion(ShowtimeRequestDTO dto){
-        log.info("Creando nueva función para la película ID: {}", dto.getMovieId());
+    @Transactional
+    public Showtime crearFuncion(ShowtimeRequestDTO dto) {
+        log.info("Crear funcion: iniciando validaciones...");
+        try {
+            movieDTO pelicula = movieClient.obtenerPeliculaPorId(dto.getMovieId());
+            if (pelicula == null) throw new RuntimeException("Crear funcion: pelicula no encontrada con el id: " + dto.getMovieId());
+        } catch (Exception e) {
+            log.error("Error al validar película: {}", e.getMessage());
+            throw new RuntimeException("Crear Funcion: La película con ID " + dto.getMovieId() + " no fue encontrada.");
+        }
 
-        Showtime showtime = new Showtime();
-        showtime.setMovieId(dto.getMovieId());
-        showtime.setRoomId(dto.getRoomId());
-        showtime.setFechaHora(dto.getFechaHora());
-        showtime.setPrecioTicket(dto.getPrecioTicket());
+        try {
+            roomDTO sala = roomClient.obtenerSalaPorId(dto.getRoomId());
+            if (sala == null) throw new RuntimeException("Crear funcion: sala No encontrada");
+        } catch (Exception e) {
+            log.error("Crear funcion: error al validar sala: {}", e.getMessage());
+            throw new RuntimeException("Crear funcion: La sala con ID " + dto.getRoomId() + " no encontrada.");
+        }
 
-        return showtimeRepository.save(showtime);
+        try {
+            Showtime showtime = new Showtime();
+
+            showtime.setMovieId(dto.getMovieId());
+            showtime.setRoomId(dto.getRoomId());
+            showtime.setPrecioTicket(dto.getPrecioTicket());
+            showtime.setFechaHora(LocalDateTime.now());
+            Showtime guardado = showtimeRepository.save(showtime);
+            log.info("Crear Funcion: función guardada con éxito. ID: {}", guardado.getId());
+            return guardado;
+
+        } catch (Exception e) {
+            log.error("Error al guardar: {}", e.getMessage());
+            throw new RuntimeException("Crear Funcion: error interno al guardar en la base de datos.");
+        }
     }
-    public List<Showtime> listarTodas() {
-        return showtimeRepository.findAll();
+
+    public List<Showtime> findAll() {
+        log.info("Buscar all funciones: Iniciando consulta global de Funciones.");
+        List<Showtime> funcionesList = showtimeRepository.findAll();
+        log.info("Buscar all funciones: consulta finalizada. Funciones recuperadas: {}", funcionesList.size());
+        return funcionesList;
     }
 
     public void deleteUser(Long id) {
@@ -56,7 +97,7 @@ public class ShowtimeService {
 
         existente.setMovieId(dto.getMovieId());
         existente.setRoomId(dto.getRoomId());
-        existente.setFechaHora(dto.getFechaHora());
+        existente.setFechaHora(LocalDateTime.now());
         existente.setPrecioTicket(dto.getPrecioTicket());
 
         log.info("Actualizando funcion ID: {}", id);

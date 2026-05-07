@@ -1,5 +1,6 @@
 package cine.proyect.bookingservice.DTO;
 
+import cine.proyect.bookingservice.Model.bookingStatus;
 import jakarta.validation.constraints.*;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,6 @@ public class bookingDTO {
     @Positive(message = "El ID del asiento debe ser un número positivo")
     private Long seatId;
 
-    @NotNull(message = "El estado de la reserva es obligatorio")
-    private String status;
+    private bookingStatus status;
+
 }

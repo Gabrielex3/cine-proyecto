@@ -24,7 +24,7 @@ public class GlobalExpections {
         log.error("REST request: Error de validacion en los datos de entrada");
 
         Map<String, Object> response = new HashMap<>();
-        response.put("timestap", LocalDateTime.now());
+        response.put("timestamp", LocalDateTime.now());
         response.put("status", HttpStatus.BAD_REQUEST.value());
         response.put("error","Error de validacion");
 
@@ -42,7 +42,7 @@ public class GlobalExpections {
         log.error("REST request: Error interno o de negocio - {}", ex.getMessage());
 
         Map<String, Object> response = new HashMap<>();
-        response.put("timestap", LocalDateTime.now());
+        response.put("timestamp", LocalDateTime.now());
 
         if (ex.getMessage().contains("No encontrada")) {
             response.put("status", HttpStatus.NOT_FOUND.value());

@@ -24,6 +24,11 @@ public class AsientoController {
         return new ResponseEntity<>(listaAsientos, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Asiento> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(asientoService.findAsientoById(id));
+    }
+
     @PostMapping
     public ResponseEntity<Asiento> crear(@Valid @RequestBody AsientoRequestDTO dto) {
         Asiento nuevo = asientoService.crearAsiento(dto);

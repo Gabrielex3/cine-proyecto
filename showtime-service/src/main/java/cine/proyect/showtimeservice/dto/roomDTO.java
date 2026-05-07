@@ -1,4 +1,4 @@
-package cine.proyect.seatservice.Dto;
+package cine.proyect.showtimeservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

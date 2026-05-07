@@ -23,7 +23,10 @@ public class movieService {
 
     public Movie getMovieById(long id){
         log.info("Buscando pelicula con ID: {}", id);
-        return repo.findById(id).orElseThrow(() -> new RuntimeException("Pelicula no encontrada con el ID: " + id));
+        return repo.findById(id).orElseThrow(() -> {
+            log.error("Buscar pelicula por id: La pelicula con ID {} no existe en la base de datos", id);
+            return new RuntimeException("Buscar pelicula por id: Pelicula no encontrada con el ID: " + id);
+        });
     }
 
     public Movie createMovie(MovieDTO dto){

@@ -21,6 +21,14 @@ public class AsientoService {
     private final AsientoRepository asientoRepository;
     private final SalaClient salaClient;
 
+    public Asiento findAsientoById(Long id) {
+        log.info("Buscando Asiento con ID: {}", id);
+        return asientoRepository.findById(id).orElseThrow(() -> {
+            log.error("Fallo de búsqueda: No existe el asiento con ID {}", id);
+            return new RuntimeException("Asiento no encontrado con ID: " + id);
+        });
+    }
+
 
     public List <Asiento> listarAsientos() {
         log.info("Iniciando listar asientos");

@@ -1,7 +1,13 @@
 package cine.proyect.bookingservice.Model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "bookings")
 public class booking {
@@ -20,7 +26,7 @@ public class booking {
     private Long seatId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false,name = "STATUS")
+    @Column(nullable = false, name = "STATUS", updatable = true)
     private bookingStatus status;
 
 }

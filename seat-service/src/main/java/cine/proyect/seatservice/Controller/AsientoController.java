@@ -12,11 +12,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/asiento")
+@RequestMapping("/api/v1/cine/asiento")
 @RequiredArgsConstructor
 public class AsientoController {
 
     private final AsientoService asientoService;
+
+    @GetMapping
+    public ResponseEntity<List<Asiento>> getAllAsientos(){
+        List<Asiento> listaAsientos =asientoService.listarAsientos();
+        return new ResponseEntity<>(listaAsientos, HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<Asiento> crear(@Valid @RequestBody AsientoRequestDTO dto) {

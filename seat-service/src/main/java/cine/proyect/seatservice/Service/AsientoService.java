@@ -2,8 +2,10 @@ package cine.proyect.seatservice.Service;
 
 import cine.proyect.seatservice.Client.SalaClient;
 import cine.proyect.seatservice.Dto.AsientoRequestDTO;
+import cine.proyect.seatservice.Dto.roomDTO;
 import cine.proyect.seatservice.Model.Asiento;
 import cine.proyect.seatservice.Repository.AsientoRepository;
+import feign.FeignException;
 import jakarta.transaction.Transactional;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,14 @@ import java.util.List;
 public class AsientoService {
     private final AsientoRepository asientoRepository;
     private final SalaClient salaClient;
+
+
+    public List <Asiento> listarAsientos() {
+        log.info("Iniciando listar asientos");
+        List<Asiento> asientos = asientoRepository.findAll();
+        log.info("Consulta finalizada. Registros recuperados: {}", asientos.size());
+        return asientos;
+    }
 
     @Transactional
     public Asiento crearAsiento(AsientoRequestDTO dto){
@@ -48,8 +58,21 @@ public class AsientoService {
     }
 
     public List<Asiento> listarPorSala(Long salaId) {
-        log.info("Listando asientos para la sala ID: {}", salaId);
-        return asientoRepository.findBySalaId(salaId);
+        log.info("Listar por sala: buscando sala con ID: {}", salaId);
+
+        try {
+            roomDTO sala = salaClient.obtenerSalaPorId(salaId);
+
+            if (sala == null) {
+                throw new RuntimeException("Listar por sala: la sala con ID " + salaId + " no existe.");
+            }
+
+            return asientoRepository.findBySalaId(salaId);
+
+        } catch (FeignException e) {
+            log.error("Listar por sala: Error de comunicación: {}", e.getMessage());
+            throw new RuntimeException("Listar por sala: la sala con ID " + salaId + " no existe o no está disponible.");
+        }
     }
 
     public Asiento actualizarEstado(Long id, boolean disponible) {

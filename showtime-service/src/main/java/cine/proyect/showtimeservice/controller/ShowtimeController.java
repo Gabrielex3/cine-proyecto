@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/showtime")
+@RequestMapping("/api/v1/cine/showtime")
 @RequiredArgsConstructor
 public class ShowtimeController {
     private final ShowtimeService showtimeService;

@@ -1,0 +1,6 @@
+CREATE TABLE asientos (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    numero_fila VARCHAR(10) NOT NULL,
+    disponible BOOLEAN NOT NULL DEFAULT TRUE,
+    sala_id BIGINT NOT NULL
+);

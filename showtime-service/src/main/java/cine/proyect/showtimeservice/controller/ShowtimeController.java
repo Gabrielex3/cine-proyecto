@@ -6,14 +6,13 @@ import cine.proyect.showtimeservice.service.ShowtimeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/showtime")
+@RequestMapping("/api/v1/cine/showtime")
 @RequiredArgsConstructor
 public class ShowtimeController {
     private final ShowtimeService showtimeService;
@@ -25,7 +24,7 @@ public class ShowtimeController {
 
     @GetMapping
     public ResponseEntity<List<Showtime>>listar(){
-        return ResponseEntity.ok(showtimeService.listarTodas());
+        return ResponseEntity.ok(showtimeService.findAll());
     }
 
     @GetMapping("/{id}")

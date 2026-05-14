@@ -14,9 +14,6 @@ public class ShowtimeRequestDTO {
     @NotNull(message = "El ID de la sala es obligatorio")
     private Long roomId;
 
-    @NotNull(message = "La fecha y hora son obligatorias")
-    private LocalDateTime fechaHora;
-
     @Positive(message = "El precio debe ser un valor positivo")
     private Double precioTicket;
 }

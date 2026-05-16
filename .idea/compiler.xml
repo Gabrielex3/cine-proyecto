@@ -16,12 +16,13 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
         </processorPath>
-        <module name="room-services" />
-        <module name="movie-service" />
         <module name="payment-service" />
         <module name="showtime-service" />
         <module name="cinema-service" />
         <module name="booking-service" />
+        <module name="room-services" />
+        <module name="movie-service" />
+        <module name="user-service" />
       </profile>
     </annotationProcessing>
   </component>

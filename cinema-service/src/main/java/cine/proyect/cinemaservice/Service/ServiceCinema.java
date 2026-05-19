@@ -2,7 +2,9 @@ package cine.proyect.cinemaservice.Service;
 
 import cine.proyect.cinemaservice.DTO.CinemaDTO;
 import cine.proyect.cinemaservice.Model.Cinema;
+import cine.proyect.cinemaservice.Model.comunas;
 import cine.proyect.cinemaservice.Repository.RepositoryCinema;
+import cine.proyect.cinemaservice.Repository.comunaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ public class ServiceCinema {
 
     @Autowired
     private RepositoryCinema repo;
+    @Autowired
+    private comunaRepository crepo;
 
 
     public List<Cinema> getAllCinemas() {
@@ -31,26 +35,30 @@ public class ServiceCinema {
 
 
     public Cinema crearCinema(CinemaDTO dto) {
+        comunas comuna = crepo.findById(dto.getComunaId())
+                .orElseThrow(() -> new RuntimeException("La comuna con ID " + dto.getComunaId() + " no existe."));
         try {
-            log.info("Iniciando creación de sucursal: {}", dto.getCine());
+            log.info("Iniciando creación de cine: {}", dto.getCine());
 
             Cinema cinema = new Cinema();
             cinema.setCine(dto.getCine());
-            cinema.setCine(dto.getDireccion());
-            cinema.setCiudad(dto.getCiudad());
+            cinema.setDireccion(dto.getDireccion());
+            cinema.setComuna(comuna);
 
             Cinema savedCinema = repo.save(cinema);
-            log.info("Sucursal creada exitosamente con ID: {}", savedCinema.getId());
+            log.info("Cine creado exitosamente con ID: {}", savedCinema.getId());
             return savedCinema;
 
         } catch (Exception e) {
-            log.error("Error al guardar la sucursal en la BD: {}", e.getMessage());
-            throw new RuntimeException("Error interno al intentar crear la sucursal");
+            log.error("Error al guardar la cine en la BD: {}", e.getMessage());
+            throw new RuntimeException("Error interno al intentar crear el cine");
         }
     }
 
 
     public Cinema actualizarCinema(Long id, CinemaDTO dto) {
+        comunas comuna = crepo.findById(dto.getComunaId())
+                .orElseThrow(() -> new RuntimeException("La comuna con ID " + dto.getComunaId() + " no existe."));
         try {
             log.info("Iniciando actualización de la sucursal con ID: {}", id);
 
@@ -58,7 +66,7 @@ public class ServiceCinema {
 
             existingCinema.setCine(dto.getCine());
             existingCinema.setDireccion(dto.getDireccion());
-            existingCinema.setCiudad(dto.getCiudad());
+            existingCinema.setComuna(comuna);
 
             Cinema updatedCinema = repo.save(existingCinema);
             log.info("Sucursal con ID: {} actualizada exitosamente", updatedCinema.getId());

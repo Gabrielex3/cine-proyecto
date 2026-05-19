@@ -26,4 +26,8 @@ public class bookingDTO {
 
     private bookingStatus status;
 
+    @NotNull(message = "El ID de cinema es obligatorio")
+    private Long cinema;
+
+
 }

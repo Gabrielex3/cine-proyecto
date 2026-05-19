@@ -30,37 +30,24 @@ public class ShowtimeService {
     @Transactional
     public Showtime crearFuncion(ShowtimeRequestDTO dto) {
         log.info("Crear funcion: iniciando validaciones...");
-        try {
-            movieDTO pelicula = movieClient.obtenerPeliculaPorId(dto.getMovieId());
-            if (pelicula == null) throw new RuntimeException("Crear funcion: pelicula no encontrada con el id: " + dto.getMovieId());
-        } catch (Exception e) {
-            log.error("Error al validar película: {}", e.getMessage());
-            throw new RuntimeException("Crear Funcion: La película con ID " + dto.getMovieId() + " no fue encontrada.");
+
+        movieDTO pelicula = movieClient.obtenerPeliculaPorId(dto.getMovieId());
+        if (pelicula == null) {
+            throw new RuntimeException("La película con ID " + dto.getMovieId() + " no existe.");
         }
 
-        try {
-            roomDTO sala = roomClient.obtenerSalaPorId(dto.getRoomId());
-            if (sala == null) throw new RuntimeException("Crear funcion: sala No encontrada");
-        } catch (Exception e) {
-            log.error("Crear funcion: error al validar sala: {}", e.getMessage());
-            throw new RuntimeException("Crear funcion: La sala con ID " + dto.getRoomId() + " no encontrada.");
+        roomDTO sala = roomClient.obtenerSalaPorId(dto.getRoomId());
+        if (sala == null) {
+            throw new RuntimeException("La sala con ID " + dto.getRoomId() + " no existe.");
         }
 
-        try {
-            Showtime showtime = new Showtime();
+        Showtime showtime = new Showtime();
+        showtime.setMovieId(dto.getMovieId());
+        showtime.setRoomId(dto.getRoomId());
+        showtime.setPrecioTicket(dto.getPrecioTicket());
+        showtime.setFechaHora(dto.getFechaFuncion());
 
-            showtime.setMovieId(dto.getMovieId());
-            showtime.setRoomId(dto.getRoomId());
-            showtime.setPrecioTicket(dto.getPrecioTicket());
-            showtime.setFechaHora(LocalDateTime.now());
-            Showtime guardado = showtimeRepository.save(showtime);
-            log.info("Crear Funcion: función guardada con éxito. ID: {}", guardado.getId());
-            return guardado;
-
-        } catch (Exception e) {
-            log.error("Error al guardar: {}", e.getMessage());
-            throw new RuntimeException("Crear Funcion: error interno al guardar en la base de datos.");
-        }
+        return showtimeRepository.save(showtime);
     }
 
     public List<Showtime> findAll() {

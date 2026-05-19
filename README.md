@@ -36,21 +36,21 @@ Cada servicio es **independiente y escalable**, comunicándose a través de **Op
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    SISTEMA DE CINES (Microservicios)             │
+│                    SISTEMA DE CINES (Microservicios)            │
 ├─────────────────────────────────────────────────────────────────┤
-│                                                                   │
+│                                                                  │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │
-│  │   Usuario    │  │   Película   │  │   Cinemar    │            │
+│  │   Users      │  │   Movie      │  │   Cinema     │            │
 │  │  (8080)      │  │   (8081)     │  │  (8087)      │            │
 │  └──────────────┘  └──────────────┘  └──────────────┘            │
-│                                                                   │
+│                                                                  │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │
-│  │   Sala       │  │  Asiento     │  │  Función     │            │
+│  │   Room       │  │  Seat        │  │  Showtime    │            │
 │  │  (8086)      │  │   (8083)     │  │  (8082)      │            │
 │  └──────────────┘  └──────────────┘  └──────────────┘            │
-│                                                                   │
+│                                                                  │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │
-│  │   Reserva    │  │   Ticket     │  │   Pago       │            │
+│  │   booking    │  │   Ticket     │  │   Payment    │            │
 │  │  (8085)      │  │  (8088)      │  │  (8084)      │            │
 │  └──────────────┘  └──────────────┘  └──────────────┘            │
 │                                                                   │
@@ -658,7 +658,7 @@ Todas las respuestas siguen el patrón REST con códigos HTTP estándar:
 
 #### 1. Clonar el Repositorio
 ```bash
-git clone https://github.com/usuario/cine-proyecto.git
+git clone https://github.com/Gabrielex3/cine-proyecto.git
 cd cine-proyecto
 ```
 
@@ -709,52 +709,7 @@ mvn clean install -DskipTests
 
 ## 🚀 Ejecución
 
-### Opción 1: Ejecutar cada servicio individualmente
-
-#### En Terminal 1 - User Service
-```bash
-cd user-service
-mvn spring-boot:run
-# Servidor corriendo en http://localhost:8080
-```
-
-#### En Terminal 2 - Movie Service
-```bash
-cd movie-service
-mvn spring-boot:run
-# Servidor corriendo en http://localhost:8081
-```
-
-#### En Terminal 3 - Showtime Service
-```bash
-cd showtime-service
-mvn spring-boot:run
-# Servidor corriendo en http://localhost:8082
-```
-
-#### Continuar de la misma forma para los demás servicios:
-- Seat Service (Terminal 4): `mvn spring-boot:run` en `8083`
-- Payment Service (Terminal 5): `mvn spring-boot:run` en `8084`
-- Booking Service (Terminal 6): `mvn spring-boot:run` en `8085`
-- Room Service (Terminal 7): `mvn spring-boot:run` en `8086`
-- Cinema Service (Terminal 8): `mvn spring-boot:run` en `8087`
-- Ticket Service (Terminal 9): `mvn spring-boot:run` en `8088`
-- Notification Service (Terminal 10): `mvn spring-boot:run` en `8089`
-
-### Opción 2: Ejecutar con Maven Wrapper
-```bash
-cd user-service
-./mvnw spring-boot:run
-```
-
-### Opción 3: Compilar a JAR y ejecutar
-```bash
-# Compilar
-mvn clean package -DskipTests
-
-# Ejecutar
-java -jar user-service/target/user-service-1.0.0.jar
-```
+### Ejecutar cada servicio individualmente
 
 ---
 
@@ -884,3 +839,4 @@ Alexis Rozas
 
 **Última actualización**: Mayo 2026
 **Versión del Proyecto**: 1.0.0
+

@@ -155,4 +155,19 @@ public class bookingService {
         }
     }
 
+    @Transactional
+    public booking actualizarEstado(Long id, bookingDTO dto) {
+        log.info("Actualizar estado: Iniciando actualización para booking ID {}", id);
+        booking reserva = repo.findById(id).orElseThrow(() -> {
+            log.error("Actualizar estado: Reserva {} no encontrada", id);
+            return new RuntimeException("Reserva no encontrada");
+        });
+
+        reserva.setStatus(dto.getStatus());
+
+        log.info("Actualizar estado: Estado actualizado correctamente para booking {}", id);
+
+        return repo.save(reserva);
+    }
+
 }

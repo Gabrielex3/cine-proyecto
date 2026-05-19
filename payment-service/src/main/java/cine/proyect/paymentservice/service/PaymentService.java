@@ -1,45 +1,92 @@
 package cine.proyect.paymentservice.service;
 
 import cine.proyect.paymentservice.client.BookingClient;
-import cine.proyect.paymentservice.dto.PaymentRequestDTO;
+import cine.proyect.paymentservice.client.TicketClient;
+import cine.proyect.paymentservice.client.notificationClient;
+import cine.proyect.paymentservice.client.showtimeClient;
+import cine.proyect.paymentservice.dto.*;
 import cine.proyect.paymentservice.model.*;
 import cine.proyect.paymentservice.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
 
+    @Autowired
     private final PaymentRepository paymentRepository;
+    @Autowired
     private final BookingClient bookingClient;
-    @Transactional
+    @Autowired
+    private showtimeClient showtimeClient;
+    @Autowired
+    private TicketClient ticketClient;
+
+    @Autowired
+    notificationClient notificationClient;
+
+    @Transactional(rollbackFor = Exception.class)
     public Payment procesarPago(PaymentRequestDTO dto) {
-        log.info("Validando reserva {} con booking-service", dto.getReservaId());
-        bookingClient.buscarReservaPorId(dto.getReservaId());
-        log.info("Iniciando proceso de pago para la reserva: {}", dto.getReservaId());
-        Payment payment = new Payment();
-        payment.setMonto(dto.getMonto());
-        payment.setMoneda(dto.getMoneda());
-        payment.setReservaId(dto.getReservaId());
-        payment.setTimestamp(LocalDateTime.now());
+        log.info("Iniciando proceso de pago para Reserva ID: {}", dto.getReservaId());
 
-        boolean esExitoso = new Random().nextDouble() < 0.7;
-        payment.setEstado(esExitoso ? PaymentStatus.APPROVED : PaymentStatus.REJECTED);
-        Payment guardado = paymentRepository.save(payment);
-
-        if (esExitoso) {
-            log.info("Pago ID {} APROBADO exitosamente", guardado.getId());
-        } else {
-            log.warn("Pago ID {} RECHAZADO por la entidad bancaria simulada", guardado.getId());
+        bookingDTO reserva = bookingClient.buscarReservaPorId(dto.getReservaId());
+        if (reserva == null) {
+            throw new RuntimeException("Error: La reserva no existe.");
         }
-        return guardado;
+        if (!"CREATED".equalsIgnoreCase(reserva.getStatus())) {
+            throw new RuntimeException("La reserva no está en estado CREATED");
+        }
+        showtimeDTO showtime = showtimeClient.obtenerPorIdShowtime(reserva.getShowtimeId());
+        if (showtime == null) {
+            throw new RuntimeException("Error: La función no existe.");
+        }
+        Payment payment = new Payment();
+        payment.setReservaId(dto.getReservaId());
+        payment.setMonto(dto.getMonto());
+        payment.setTimestamp(LocalDateTime.now());
+        boolean esExitoso = dto.getMonto().compareTo(showtime.getPrecioTicket()) >= 0;
+        if (esExitoso) {
+            payment.setEstado(PaymentStatus.APPROVED);
+            payment = paymentRepository.save(payment);
+            log.info("Pago registrado internamente con ID: {}", payment.getId());
+            try {
+                reserva.setStatus("CONFIRMED");
+                bookingClient.actualizarStatus(reserva.getId(), reserva);
+                TicketDTO solicitudTicket = new TicketDTO();
+                solicitudTicket.setBookingId(reserva.getId());
+                solicitudTicket.setPaymentId(payment.getId());
+
+                TicketDTO ticketCreado = ticketClient.crearTicket(solicitudTicket);
+                log.info("Ticket generado exitosamente con ID: {}", ticketCreado.getId());
+
+                NotificationRequestDTO notifDto = new NotificationRequestDTO();
+                notifDto.setIdTicket(ticketCreado.getId()); // YA NO ES NULL
+                notifDto.setIdUsuario(reserva.getUserId());
+                notifDto.setMensaje("¡Pago aprobado! Tu entrada es la #" + ticketCreado.getId());
+                notifDto.setTipo("TICKET_CONFIRMATION");
+
+                notificationClient.enviarNotificacion(notifDto);
+                log.info("Proceso de pago y notificación completado.");
+
+            } catch (Exception e) {
+                log.error("Fallo crítico en el flujo post-pago: {}", e.getMessage());
+                throw new RuntimeException("Fallo en la cadena de servicios: " + e.getMessage());
+            }
+
+        } else {
+            payment.setEstado(PaymentStatus.REJECTED);
+            payment = paymentRepository.save(payment);
+            log.warn("Pago rechazado por monto insuficiente.");
+        }
+
+        return payment;
     }
 
     public Payment buscarPorId(Long id) {

@@ -1,37 +1,52 @@
 package cine.proyect.notificationservice.Controller;
 
-import cine.proyect.notificationservice.Service.notificationService;
-import cine.proyect.notificationservice.DTO.notificationDTO;
-import cine.proyect.notificationservice.Model.Notificacion;
-import jakarta.validation.Valid;
+import cine.proyect.notificationservice.DTO.NotificationRequestDTO;
+import cine.proyect.notificationservice.Model.Notification;
+import cine.proyect.notificationservice.Service.NotificationService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
-@RequestMapping("/api/cine/notificaciones")
-public class notificationController {
+@RequestMapping("/api/v1/cine/notification")
+@Slf4j
+@RequiredArgsConstructor
+public class NotificationController {
+    private final NotificationService notificationService;
 
-    @Autowired
-    private notificationService service;
+    @PostMapping("/send")
+    public ResponseEntity<String> enviar(@RequestBody NotificationRequestDTO dto) { // <--- ¡Asegúrate de tener @RequestBody!
+        notificationService.enviarNotificacion(dto);
+        return ResponseEntity.ok("Notificación enviada");
+    }
 
-    // 1. POST: Disparar una nueva notificación
-    @PostMapping
-    public ResponseEntity<Notificacion> sendNotification(@Valid @RequestBody notificationDTO notification) {
-        log.info("REST request: Solicitud para enviar notificación a: {}", notification.getReceptor());
-        Notificacion procesoNotificacion = service.procesoNotificacion(notification);
-        return ResponseEntity.status(HttpStatus.CREATED).body(procesoNotificacion);
+    @GetMapping("/historial")
+    public ResponseEntity<List<Notification>>verHistorial(){
+        return ResponseEntity.ok(notificationService.obtenerTodas());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Notification> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(notificationService.obtenerPorId(id));
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<Notificacion>> getAllNotifications() {
-        log.info("REST request: Solicitando historial de notificaciones");
-        return ResponseEntity.ok(service.getAllNotifications());
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<Notification>> buscarPorIdUser(@PathVariable Long id) {
+        return ResponseEntity.ok(notificationService.obtenerPorUsuario(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Notification> actualizar(@PathVariable Long id, @RequestBody NotificationRequestDTO dto) {
+        return ResponseEntity.ok(notificationService.actualizarNotificacion(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        notificationService.eliminarNotificacion(id);
+        return ResponseEntity.noContent().build();
     }
 }

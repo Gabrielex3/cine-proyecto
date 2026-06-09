@@ -32,7 +32,7 @@ public class globalExceptionHandler {
         errorResponse.put("timestamp", LocalDateTime.now());
         errorResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
         errorResponse.put("error", "Error Interno del Servidor");
-        errorResponse.put("message", "Ha ocurrido un error inesperado en el sistema.");
+        errorResponse.put("message", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }

@@ -2,6 +2,7 @@ package cine.proyect.bookingservice.Controller;
 
 import cine.proyect.bookingservice.DTO.bookingDTO;
 import cine.proyect.bookingservice.Model.booking;
+import cine.proyect.bookingservice.Model.bookingStatus;
 import cine.proyect.bookingservice.Service.bookingService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,12 @@ public class bookingController {
         booking reservaActualizada = bookingService.actualizarReserva(id, dto);
 
         return ResponseEntity.ok(reservaActualizada);
+    }
+
+    @PutMapping("/cambiarestado/{id}")
+    public ResponseEntity<booking> updateStatusBooking(@PathVariable Long id, @RequestBody bookingDTO dto) {
+        booking statusActualizado = bookingService.actualizarEstado(id, dto);
+        return ResponseEntity.ok(statusActualizado);
     }
 
     @DeleteMapping("/{id}")

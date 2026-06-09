@@ -29,4 +29,7 @@ public class booking {
     @Column(nullable = false, name = "STATUS", updatable = true)
     private bookingStatus status;
 
+    @Column(name = "CINEMA_ID", nullable = false)
+    private Long cinema;
+
 }

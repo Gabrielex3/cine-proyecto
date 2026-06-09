@@ -56,4 +56,17 @@ import java.util.Map;
 
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, Object>> handleHttpMessageNotReadableException(org.springframework.http.converter.HttpMessageNotReadableException ex) {
+        log.error("REST request: El cuerpo de la petición (Body) está vacío o mal formado");
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("timestamp", LocalDateTime.now());
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+        response.put("error", "Cuerpo de petición faltante");
+        response.put("message", "El cuerpo de la petición (JSON) es requerido y no fue enviado.");
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }

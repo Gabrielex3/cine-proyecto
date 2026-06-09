@@ -1,12 +1,17 @@
 package cine.proyect.paymentservice.client;
 
+import cine.proyect.paymentservice.dto.bookingDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "booking-service", url = "http://localhost:8085")
 public interface BookingClient {
 
-    @GetMapping("/api/booking/{id}")
-    Object buscarReservaPorId(@PathVariable("id") Long id);
+    @GetMapping("/api/v1/cine/bookings/{id}")
+    bookingDTO buscarReservaPorId(@PathVariable("id") Long id);
+    @PutMapping("/api/v1/cine/bookings/cambiarestado/{id}")
+    bookingDTO actualizarStatus(@PathVariable Long id, @RequestBody bookingDTO dto);
 }

@@ -16,4 +16,7 @@ public class ShowtimeRequestDTO {
 
     @Positive(message = "El precio debe ser un valor positivo")
     private Double precioTicket;
+
+    @NotNull(message = "Debes ingresar una fecha y hora para la funcion")
+    private LocalDateTime fechaFuncion;
 }

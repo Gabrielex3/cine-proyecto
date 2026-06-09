@@ -18,12 +18,13 @@
         </processorPath>
         <module name="payment-service" />
         <module name="showtime-service" />
-        <module name="cinema-service" />
         <module name="booking-service" />
+        <module name="cinema-service" />
         <module name="room-services" />
         <module name="movie-service" />
         <module name="user-service" />
         <module name="notification-service" />
+        <module name="ticket-service" />
       </profile>
     </annotationProcessing>
   </component>
@@ -37,6 +38,7 @@
       <module name="room-services" options="-parameters" />
       <module name="seat-service" options="-parameters" />
       <module name="showtime-service" options="-parameters" />
+      <module name="ticket-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>

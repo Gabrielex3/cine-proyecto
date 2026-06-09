@@ -1,11 +1,9 @@
 package cine.proyect.bookingservice.Service;
 
+import cine.proyect.bookingservice.Client.cinemaClient;
 import cine.proyect.bookingservice.Client.seatClient;
 import cine.proyect.bookingservice.Client.showtimeClient;
-import cine.proyect.bookingservice.DTO.bookingDTO;
-import cine.proyect.bookingservice.DTO.seatDTO;
-import cine.proyect.bookingservice.DTO.showtimeDTO;
-import cine.proyect.bookingservice.DTO.userDTO;
+import cine.proyect.bookingservice.DTO.*;
 import cine.proyect.bookingservice.Model.booking;
 import cine.proyect.bookingservice.Model.bookingStatus;
 import cine.proyect.bookingservice.Repository.bookingRepository;
@@ -29,6 +27,9 @@ public class bookingService {
     private showtimeClient showtimeClient;
     @Autowired
     private seatClient seatClient;
+
+    @Autowired
+    private cinemaClient cinemaClient;
 
 
     public List<booking> findAllBookings() {
@@ -72,6 +73,11 @@ public class bookingService {
         } catch (Exception e) {
             log.error("Creacion booking: Asiento {} no encontrado", dto.getSeatId());
             throw new RuntimeException("Creacion booking: El asiento con ID " + dto.getSeatId() + " No encontrada.");
+        }try {
+            cinemaDTO cinema = cinemaClient.obtenerCinemaPorId(dto.getCinema());
+            if (cinema == null) throw new RuntimeException("Creacion booking: No existe cinema con ese id: : "+dto.getSeatId());
+        } catch (Exception e) {
+            throw new RuntimeException("Creacion booking: El cinema con ID " + dto.getCinema() + " No encontrada.");
         }
         try {
             booking booking = new booking();
@@ -79,6 +85,7 @@ public class bookingService {
             booking.setSeatId(dto.getSeatId());
             booking.setShowtimeId(dto.getShowtimeId());
             booking.setStatus(bookingStatus.CREATED);
+            booking.setCinema(dto.getCinema());
 
             log.info("Creacion booking: Guardando reserva en DB...");
             return repo.save(booking);
@@ -146,6 +153,21 @@ public class bookingService {
             log.error("Actualizar booking: Error al guardar en DB: {}", e.getMessage());
             throw new RuntimeException("Actualizar booking: Error interno al procesar la actualización.");
         }
+    }
+
+    @Transactional
+    public booking actualizarEstado(Long id, bookingDTO dto) {
+        log.info("Actualizar estado: Iniciando actualización para booking ID {}", id);
+        booking reserva = repo.findById(id).orElseThrow(() -> {
+            log.error("Actualizar estado: Reserva {} no encontrada", id);
+            return new RuntimeException("Reserva no encontrada");
+        });
+
+        reserva.setStatus(dto.getStatus());
+
+        log.info("Actualizar estado: Estado actualizado correctamente para booking {}", id);
+
+        return repo.save(reserva);
     }
 
 }

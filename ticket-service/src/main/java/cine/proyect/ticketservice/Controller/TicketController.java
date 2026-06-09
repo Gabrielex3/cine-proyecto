@@ -34,7 +34,7 @@ public class TicketController {
                     description = "Ticket creado exitosamente.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = User.class)
+                            schema = @Schema(implementation = Ticket.class)
                     )
             ),
             @ApiResponse(
@@ -61,7 +61,7 @@ public class TicketController {
                     description = "Operación exitosa. Se encontró el ticket.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = User.class)
+                            schema = @Schema(implementation = Ticket.class)
                     )
             ),
             @ApiResponse(

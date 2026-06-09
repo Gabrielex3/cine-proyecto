@@ -115,7 +115,7 @@ public class bookingService {
 
 
     @Transactional
-    public booking actualizarReserva(Long id, bookingDTO dto) {
+    public booking updateBooking(Long id, bookingDTO dto) {
         log.info("Actualizar booking: Iniciando edición de reserva ID: {}", id);
         booking reservaExistente = repo.findById(id).orElseThrow(() -> {
                     log.error("Actualizar booking: Reserva {} no encontrada", id);

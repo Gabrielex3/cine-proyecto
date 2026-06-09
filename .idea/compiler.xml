@@ -9,7 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="seat-service" />
       </profile>
-      <profile name="Annotation profile for ticket-service" enabled="true">
+      <profile name="Annotation profile for notification-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -20,8 +20,8 @@
         <module name="showtime-service" />
         <module name="cinema-service" />
         <module name="booking-service" />
-        <module name="room-services" />
         <module name="movie-service" />
+        <module name="room-services" />
         <module name="user-service" />
         <module name="notification-service" />
         <module name="ticket-service" />

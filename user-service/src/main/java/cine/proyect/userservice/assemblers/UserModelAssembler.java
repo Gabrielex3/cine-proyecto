@@ -14,10 +14,10 @@ public class UserModelAssembler implements RepresentationModelAssembler<User, En
     @Override
     public EntityModel<User> toModel(User user) {
         return EntityModel.of(user,
-                linkTo(methodOn(userControllerV2.class).getUserById(user.getId())).withSelfRel(),
-                linkTo(methodOn(userControllerV2.class).updateUser(user.getId(), null)).withRel("update"),
-                linkTo(methodOn(userControllerV2.class).delete(user.getId())).withRel("delete"),
-                linkTo(methodOn(userControllerV2.class).findAllUsers()).withRel("find users")
+                linkTo(methodOn(userControllerV2.class).getUserById(user.getId())).withRel("findUser"),
+                linkTo(methodOn(userControllerV2.class).updateUser(user.getId(), null)).withRel("updateUser"),
+                linkTo(methodOn(userControllerV2.class).delete(user.getId())).withRel("deleteUser"),
+                linkTo(methodOn(userControllerV2.class).findAllUsers()).withRel("findAllUsers")
         );
     }
 }

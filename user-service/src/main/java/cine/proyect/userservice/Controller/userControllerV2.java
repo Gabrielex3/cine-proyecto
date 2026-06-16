@@ -90,9 +90,9 @@ public class userControllerV2 {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operación exitosa. El usuario fue actualizado correctamente."),
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado."),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor.")
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor, problema de actualizador de usuario.")
     })
-    public ResponseEntity<EntityModel<User>> updateUser(@PathVariable Long id, @Valid @RequestBody userDTO dto) {
+    public ResponseEntity<EntityModel<User>> updateUser(@PathVariable Long id, @RequestBody userDTO dto) {
         log.info("Actualizar V2: Modificando usuario con ID {}", id);
         User usuarioActualizado = service.updateUser(id, dto);
 

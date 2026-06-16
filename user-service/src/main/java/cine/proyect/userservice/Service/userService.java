@@ -65,15 +65,16 @@ public class userService {
         });
 
         try {
-            userExistente.setNombre(dto.getNombre());
-            userExistente.setApellido(dto.getApellido());
-            userExistente.setCorreo(dto.getCorreo());
-            userExistente.setTelefono(dto.getTelefono());
-            userExistente.setRut(dto.getRut());
+            userExistente.setNombre(dto.getNombre() != null ? dto.getNombre() : userExistente.getNombre());
+            userExistente.setApellido(dto.getApellido() != null ? dto.getApellido() : userExistente.getApellido());
+            userExistente.setCorreo(dto.getCorreo() != null ? dto.getCorreo() : userExistente.getCorreo());
+            userExistente.setTelefono(dto.getTelefono() != null ? dto.getTelefono() : userExistente.getTelefono());
+            userExistente.setRut(dto.getRut() != null ? dto.getRut() : userExistente.getRut());
 
             User actualizado = repo.save(userExistente);
             log.info("Actualización exitosa para el ID: {}", actualizado.getId());
             return actualizado;
+
         } catch (Exception e) {
             log.error("Error al actualizar el usuario ID {}: {}", id, e.getMessage());
             throw new RuntimeException("Error interno al intentar actualizar el usuario.");

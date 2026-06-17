@@ -9,9 +9,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="api-gateway" />
         <module name="eureka-server" />
-        <module name="seat-service" />
       </profile>
-      <profile name="Annotation profile for booking-service" enabled="true">
+      <profile name="Annotation profile for seat-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -24,6 +23,7 @@
         <module name="cinema-service" />
         <module name="room-services" />
         <module name="movie-service" />
+        <module name="seat-service" />
         <module name="user-service" />
         <module name="notification-service" />
         <module name="ticket-service" />

@@ -1,12 +1,27 @@
-version: '3.8'
-
 networks:
   cine-network:
     driver: bridge
 
 services:
+  cine-db:
+    image: mysql:8.0
+    container_name: cine-db
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - cine-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+
   eureka-server:
     build: ./eureka-server
+    container_name: cine-eureka-server
     ports:
       - "8761:8761"
     networks:
@@ -14,10 +29,12 @@ services:
 
   api-gateway:
     build: ./api-gateway
+    container_name: cine-api-gateway
     ports:
       - "9000:9000"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    restart: on-failure
     depends_on:
       - eureka-server
     networks:
@@ -25,80 +42,106 @@ services:
 
   user-service:
     build: ./user-service
+    container_name: cine-user-service
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    restart: on-failure
     depends_on:
       - eureka-server
+      - cine-db
     networks:
       - cine-network
 
   cinema-service:
     build: ./cinema-service
+    container_name: cine-cinema-service
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    restart: on-failure
     depends_on:
       - eureka-server
+      - cine-db
     networks:
       - cine-network
 
   movie-service:
     build: ./movie-service
+    container_name: cine-movie-service
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    restart: on-failure
     depends_on:
       - eureka-server
+      - cine-db
     networks:
       - cine-network
 
   ticket-service:
     build: ./ticket-service
+    container_name: cine-ticket-service
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    restart: on-failure
     depends_on:
       - eureka-server
+      - cine-db
     networks:
       - cine-network
 
   showtime-service:
     build: ./showtime-service
+    container_name: cine-showtime-service
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    restart: on-failure
     depends_on:
       - eureka-server
+      - cine-db
     networks:
       - cine-network
 
   seat-service:
     build: ./seat-service
+    container_name: cine-seat-service
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    restart: on-failure
     depends_on:
       - eureka-server
+      - cine-db
     networks:
       - cine-network
 
   room-service:
-    build: ./room-service
+    build: ./room-services
+    container_name: cine-room-service
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    restart: on-failure
     depends_on:
       - eureka-server
+      - cine-db
     networks:
       - cine-network
 
   payment-service:
     build: ./payment-service
+    container_name: cine-payment-service
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    restart: on-failure
     depends_on:
       - eureka-server
+      - cine-db
     networks:
       - cine-network
 
   notification-service:
     build: ./notification-service
+    container_name: cine-notification-service
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    restart: on-failure
     depends_on:
       - eureka-server
     networks:
@@ -106,9 +149,12 @@ services:
 
   booking-service:
     build: ./booking-service
+    container_name: cine-booking-service
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    restart: on-failure
     depends_on:
       - eureka-server
+      - cine-db
     networks:
       - cine-network

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/cine/payment")
+@RequestMapping("/api/v2/cine/payment")
 @Tag(name = "PAYMENT", description = "API RELACIONADA A LA CREACION DE PAGOS")
 
 @RequiredArgsConstructor

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/cine/notification")
+@RequestMapping("/api/v2/cine/notification")
 @Tag(name = "NOTIFICATION", description = "API RELACIONADA A LA CREACION DE NOTIFICACIONES")
 
 @Slf4j

@@ -21,7 +21,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("api/v1/cine/movie")
+@RequestMapping("api/v2/cine/movie")
 @Tag(name = "MOVIES", description = "API RELACIONADA A LA CREACION DE PELICULAS")
 public class movieController {
 

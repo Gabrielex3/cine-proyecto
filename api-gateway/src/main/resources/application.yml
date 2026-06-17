@@ -1,0 +1,61 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: user-service
+              uri: lb://USER-SERVICE
+              predicates:
+                - Path=/api/v2/cine/users/**
+            - id: cinema-service
+              uri: lb://CINEMA-SERVICE
+              predicates:
+                - Path=/api/v2/cine/cinemas/**
+            - id: comuna-service
+              uri: lb://CINEMA-SERVICE
+              predicates:
+                - Path=/api/v2/cine/comunas/**
+            - id: movie-service
+              uri: lb://MOVIE-SERVICE
+              predicates:
+                - Path=/api/v2/cine/movie/**
+            - id: ticket-service
+              uri: lb://TICKET-SERVICE
+              predicates:
+                - Path=/api/v2/cine/tickets/**
+            - id: showtime-service
+              uri: lb://SHOWTIME-SERVICE
+              predicates:
+                - Path=/api/v2/cine/showtime/**
+            - id: seat-service
+              uri: lb://SEAT-SERVICE
+              predicates:
+                - Path=/api/v2/cine/asiento/**
+            - id: room-service
+              uri: lb://ROOM-SERVICES
+              predicates:
+                - Path=/api/v2/cine/room/**
+            - id: payment-service
+              uri: lb://PAYMENT-SERVICE
+              predicates:
+                - Path=/api/v2/cine/payment/**
+            - id: notification-service
+              uri: lb://NOTIFICATION-SERVICE
+              predicates:
+                - Path=/api/v2/cine/notification/**
+            - id: booking-service
+              uri: lb://BOOKING-SERVICE
+              predicates:
+                - Path=/api/v2/cine/bookings/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

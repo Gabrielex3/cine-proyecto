@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
-@FeignClient(name= "booking-service", url = "http://localhost:8085/api/v1/cine/bookings")
+@FeignClient(name= "booking-service")
 public interface BookingClient {
 
-    @GetMapping("/api/v1/cine/bookings/{id}")
+    @GetMapping("/api/v2/cine/bookings/{id}")
     bookingDTO buscarReservaPorId(@PathVariable("id") Long id);
 }

@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Map;
 
-@FeignClient(name = "payment-service", url = "http://localhost:8084/api/v1/cine/payment")
+@FeignClient(name = "payment-service")
 public interface PaymentClient {
 
-    @GetMapping("/payment/{id}")
+    @GetMapping("/api/v2/cine/payment/{id}")
     PaymentRequestDTO getPaymentByBookingId(@PathVariable("id") Long bookingId);
 }

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/cine/tickets")
+@RequestMapping("/api/v2/cine/tickets")
 @Tag(name = "USUARIOS", description = "API RELACIONADA A LA CREACION DE USUARIOS")
 public class TicketController {
 

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/cine/asiento")
+@RequestMapping("/api/v2/cine/asiento")
 @Tag(name = "ASIENTOS", description = "API RELACIONADA A LA CREACION DE ASIENTOS")
 @RequiredArgsConstructor
 public class AsientoController {

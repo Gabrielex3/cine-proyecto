@@ -3,21 +3,25 @@ networks:
     driver: bridge
 
 services:
+
   cine-db:
     image: mysql:8.0
     container_name: cine-db
     ports:
       - "3307:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      MYSQL_ROOT_PASSWORD: root
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - cine-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 5s
-      retries: 10
+      test: [ "CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -proot --silent" ]
+      interval: 10s
+      timeout: 10s
+      retries: 40
+      start_period: 90s
+
 
   eureka-server:
     build: ./eureka-server
@@ -27,134 +31,167 @@ services:
     networks:
       - cine-network
 
+
   api-gateway:
     build: ./api-gateway
     container_name: cine-api-gateway
     ports:
       - "9000:9000"
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
-      - eureka-server
+      eureka-server:
+        condition: service_started
     networks:
       - cine-network
+
 
   user-service:
     build: ./user-service
     container_name: cine-user-service
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
-      - eureka-server
-      - cine-db
+      eureka-server:
+        condition: service_started
+      cine-db:
+        condition: service_healthy
     networks:
       - cine-network
+
 
   cinema-service:
     build: ./cinema-service
     container_name: cine-cinema-service
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
-      - eureka-server
-      - cine-db
+      eureka-server:
+        condition: service_started
+      cine-db:
+        condition: service_healthy
     networks:
       - cine-network
+
 
   movie-service:
     build: ./movie-service
     container_name: cine-movie-service
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
-      - eureka-server
-      - cine-db
+      eureka-server:
+        condition: service_started
+      cine-db:
+        condition: service_healthy
     networks:
       - cine-network
+
 
   ticket-service:
     build: ./ticket-service
     container_name: cine-ticket-service
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
-      - eureka-server
-      - cine-db
+      eureka-server:
+        condition: service_started
+      cine-db:
+        condition: service_healthy
     networks:
       - cine-network
+
 
   showtime-service:
     build: ./showtime-service
     container_name: cine-showtime-service
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
-      - eureka-server
-      - cine-db
+      eureka-server:
+        condition: service_started
+      cine-db:
+        condition: service_healthy
     networks:
       - cine-network
+
 
   seat-service:
     build: ./seat-service
     container_name: cine-seat-service
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
-      - eureka-server
-      - cine-db
+      eureka-server:
+        condition: service_started
+      cine-db:
+        condition: service_healthy
     networks:
       - cine-network
+
 
   room-service:
     build: ./room-services
     container_name: cine-room-service
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
-      - eureka-server
-      - cine-db
+      eureka-server:
+        condition: service_started
+      cine-db:
+        condition: service_healthy
     networks:
       - cine-network
+
 
   payment-service:
     build: ./payment-service
     container_name: cine-payment-service
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
-      - eureka-server
-      - cine-db
+      eureka-server:
+        condition: service_started
+      cine-db:
+        condition: service_healthy
     networks:
       - cine-network
+
 
   notification-service:
     build: ./notification-service
     container_name: cine-notification-service
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
-      - eureka-server
+      eureka-server:
+        condition: service_started
+      cine-db:
+        condition: service_healthy
     networks:
       - cine-network
+
 
   booking-service:
     build: ./booking-service
     container_name: cine-booking-service
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
-      - eureka-server
-      - cine-db
+      eureka-server:
+        condition: service_started
+      cine-db:
+        condition: service_healthy
     networks:
       - cine-network

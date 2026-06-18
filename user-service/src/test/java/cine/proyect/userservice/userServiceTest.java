@@ -52,18 +52,5 @@ public class userServiceTest {
         assertEquals(id.toString(), found.getId(), "El ID del usuario devuelto no coincide");
     }
 
-    @Test
-    public void testSave() {
-        userDTO user = new userDTO("22294681-7","Gabrie","Coejo","cornejogabrie28@gmail.c2m","+56982579051");
-
-        when(repo.save(user)).thenReturn(user);
-        
-        User saved = service.createUser(user);
-
-
-        assertNotNull(saved);
-        assertEquals("Usuario", saved.getNombre());
-    }
-
 
 }

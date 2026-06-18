@@ -5,8 +5,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "room-service", url = "http://localhost:8086")
+@FeignClient(name = "room-services")
 public interface roomClient {
-    @GetMapping("/api/v1/cine/room/{id}")
+    @GetMapping("/api/v2/cine/room/{id}")
     roomDTO obtenerSalaPorId(@PathVariable("id") Long id);
 }

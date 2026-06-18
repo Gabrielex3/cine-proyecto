@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/cine/bookings")
+@RequestMapping("/api/v2/cine/bookings")
 @Tag(name = "BOOKINGS", description = "API RELACIONADA A LA CREACION DE RESERVAS")
 public class bookingController {
 

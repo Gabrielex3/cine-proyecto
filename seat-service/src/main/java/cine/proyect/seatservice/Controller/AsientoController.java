@@ -3,6 +3,7 @@ package cine.proyect.seatservice.Controller;
 import cine.proyect.seatservice.Dto.AsientoRequestDTO;
 import cine.proyect.seatservice.Model.Asiento;
 import cine.proyect.seatservice.Service.AsientoService;
+import lombok.RequiredArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,7 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +20,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/cine/asiento")
+@RequestMapping("/api/v2/cine/asiento")
 @Tag(name = "ASIENTOS", description = "API RELACIONADA A LA CREACION DE ASIENTOS")
 @RequiredArgsConstructor
 public class AsientoController {
-
-    private final AsientoService asientoService;
+    @Autowired
+    private AsientoService asientoService;
 
     @GetMapping
     @Operation(summary = "METODO GET FIND ALL ASIENTOS", description = "Lista todos los asientos")

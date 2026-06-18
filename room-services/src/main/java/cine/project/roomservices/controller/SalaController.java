@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/cine/room")
+@RequestMapping("/api/v2/cine/room")
 @Tag(name = "ROOM", description = "API RELACIONADA A LA CREACION DE SALAS")
 @Slf4j
 @RequiredArgsConstructor
@@ -84,7 +84,7 @@ public class SalaController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Operación exitosa. Se encontró el usuario.",
+                    description = "Operación exitosa. Se encontró la sala.",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = Sala.class)

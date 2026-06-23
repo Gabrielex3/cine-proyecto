@@ -49,16 +49,20 @@ public class NotificationService {
         }
     }
 
-    public List<Notification> obtenerTodas(){
-        return notificationRepository.findAll();
+    public List<Notification> obtenerTodas() {
+        log.info("Iniciando consulta global de notificaciones.");
+        List<Notification> notifications = notificationRepository.findAll();
+        log.info("Consulta finalizada. Registros recuperados: {}", notifications.size());
+        return notifications;
     }
-    
+
 
     public Notification obtenerPorId(Long id) {
-        return notificationRepository.findById(id)
-                .orElseThrow(() -> {
-                    return new RuntimeException("Notificación no encontrada con ID: " + id);
-                });
+        log.info("Buscando notificacion por  ID: {}", id);
+        return notificationRepository.findById(id).orElseThrow(() -> {
+            log.error("Fallo de búsqueda: No existe la notificacion con ID {}", id);
+            return new RuntimeException("Notificacion no encontrada con ID: " + id);
+        });
     }
 
     public List<Notification> obtenerPorUsuario(Long idUsuario) {
@@ -72,15 +76,16 @@ public class NotificationService {
         return notificaciones;
     }
 
-    public Notification actualizarNotificacion(Long id, NotificationRequestDTO dto){
-        Notification existente=obtenerPorId(id);
+    public Notification actualizarNotificacion(Long id, NotificationRequestDTO dto) {
+        log.info("Actualizando notificacion por  ID: {}", id);
+        Notification existente = obtenerPorId(id);
 
-        existente.setIdUsuario(dto.getIdUsuario());
-        existente.setMensaje(dto.getMensaje());
-        existente.setTipo(dto.getTipo());
+        existente.setIdUsuario(dto.getIdUsuario() != null ? dto.getIdUsuario() : existente.getIdUsuario());
+        existente.setMensaje(dto.getMensaje() != null ? dto.getMensaje() : existente.getMensaje());
+        existente.setTipo(dto.getTipo() != null ? dto.getTipo() : existente.getTipo());
+        existente.setEstado(dto.getEstado() != null ? dto.getEstado() : existente.getEstado());
 
-        Notification actualizada = notificationRepository.save(existente);
-        return actualizada;
+        return notificationRepository.save(existente);
     }
 
     public void eliminarNotificacion(Long id) {

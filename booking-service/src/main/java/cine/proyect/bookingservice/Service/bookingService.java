@@ -87,7 +87,7 @@ public class bookingService {
             booking.setStatus(bookingStatus.CREATED);
             booking.setCinema(dto.getCinema());
 
-            log.info("Creacion booking: Guardando reserva en DB...");
+            log.info("Creacion booking: Guardando reserva en DB con el id de User: {} Numero de asiento: {}", booking.getUserId(),booking.getSeatId());
             return repo.save(booking);
 
         } catch (Exception e) {

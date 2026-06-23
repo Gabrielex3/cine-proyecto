@@ -50,7 +50,7 @@ public class ShowtimeController {
     })
 
     public ResponseEntity<Showtime> crear(@Valid @RequestBody ShowtimeRequestDTO dto){
-        return new ResponseEntity<>(showtimeService.crearFuncion(dto), HttpStatus.CREATED);
+        return new ResponseEntity<>(showtimeService.createShowtime(dto), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -152,7 +152,7 @@ public class ShowtimeController {
     })
 
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        showtimeService.deleteUser(id);
+        showtimeService.deleteShowtime(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -2,11 +2,15 @@ package cine.proyect.movieservice.Model;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "movies")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Movie {
 
     @Id

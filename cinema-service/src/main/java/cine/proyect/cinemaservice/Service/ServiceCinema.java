@@ -23,6 +23,7 @@ public class ServiceCinema {
 
     public List<Cinema> getAllCinemas() {
         log.info("Consultando la lista de todas las sucursales");
+        log.info("Consulta finalizada. Registros recuperados: {}", repo.findAll().size());
         return repo.findAll();
     }
 

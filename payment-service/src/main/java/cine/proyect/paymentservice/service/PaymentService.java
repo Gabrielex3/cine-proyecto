@@ -32,7 +32,6 @@ public class PaymentService {
     @Autowired
     notificationClient notificationClient;
 
-    @Transactional(rollbackFor = Exception.class)
     public Payment procesarPago(PaymentRequestDTO dto) {
         log.info("Iniciando proceso de pago para Reserva ID: {}", dto.getReservaId());
 
@@ -47,18 +46,22 @@ public class PaymentService {
         if (showtime == null) {
             throw new RuntimeException("Error: La función no existe.");
         }
+
         Payment payment = new Payment();
         payment.setReservaId(dto.getReservaId());
         payment.setMonto(dto.getMonto());
         payment.setTimestamp(LocalDateTime.now());
         boolean esExitoso = dto.getMonto().compareTo(showtime.getPrecioTicket()) >= 0;
+
         if (esExitoso) {
             payment.setEstado(PaymentStatus.APPROVED);
             payment = paymentRepository.save(payment);
-            log.info("Pago registrado internamente con ID: {}", payment.getId());
+            log.info("Pago registrado internamente y confirmado en BD con ID: {}", payment.getId());
+
             try {
                 reserva.setStatus("CONFIRMED");
                 bookingClient.actualizarStatus(reserva.getId(), reserva);
+
                 TicketDTO solicitudTicket = new TicketDTO();
                 solicitudTicket.setBookingId(reserva.getId());
                 solicitudTicket.setPaymentId(payment.getId());
@@ -67,7 +70,7 @@ public class PaymentService {
                 log.info("Ticket generado exitosamente con ID: {}", ticketCreado.getId());
 
                 NotificationRequestDTO notifDto = new NotificationRequestDTO();
-                notifDto.setIdTicket(ticketCreado.getId()); // YA NO ES NULL
+                notifDto.setIdTicket(ticketCreado.getId());
                 notifDto.setIdUsuario(reserva.getUserId());
                 notifDto.setMensaje("¡Pago aprobado! Tu entrada es la #" + ticketCreado.getId());
                 notifDto.setTipo("TICKET_CONFIRMATION");
@@ -90,6 +93,7 @@ public class PaymentService {
     }
 
     public Payment buscarPorId(Long id) {
+        log.info("Iniciando proceso de busqueda para Payment ID: {}", id);
         return paymentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("El pago con ID " + id + " no existe."));
     }

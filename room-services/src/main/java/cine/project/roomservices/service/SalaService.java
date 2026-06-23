@@ -36,7 +36,7 @@ public class SalaService {
         }
     }
 
-    public List<Sala> obtenerTodas(){
+    public List<Sala> obtenerTodas() {
         log.info("Buscar todas las salas: Iniciando consulta.");
         List<Sala> salasList = repoSala.findAll();
         log.info("Buscar todas las salas: consulta finalizada. Registros recuperados: {}", salasList.size());
@@ -50,17 +50,23 @@ public class SalaService {
             return new RuntimeException("Buscando sala por id: sala no encontrada con ID: " + id);
         });
     }
-    public void desactivarSala(Long id) {
-        log.info("Desactivar Sala: iniciando proceso para desactivar la sala con ID: {}", id);
+
+    public Sala desactivarSala(Long id, boolean actualizarEstado) {
+        log.info("Actualizar Sala: iniciando proceso para actualizar estado de la sala con ID: {}", id);
+
         Sala sala = repoSala.findById(id).orElseThrow(() -> {
-                    log.error("Desactivar Sala: fallo al desactivar: No existe ninguna sala con el ID: {}", id);
-                    return new RuntimeException("Desactivar Sala: no se encontró la sala con ID " + id + ". Operación cancelada.");});
+            log.error("Actualizar Sala: fallo al actualizar: No existe ninguna sala con el ID: {}", id);
+            return new RuntimeException("Actualizar Sala: no se encontró la sala con ID " + id + ". Operación cancelada.");
+        });
+
         if (!sala.getActivo()) {
-            log.warn("Desactivar Sala: la sala con ID: {} ya se encuentra desactivada.", id);
-            return;
+            log.warn("Actualizar Sala: la sala con ID: {} ya se encuentra desactivada.", id);
+        } else {
+            log.warn("Actualizar Sala: la sala con ID: {} ya se encuentra activada.", id);
         }
-        sala.setActivo(false);
-        repoSala.save(sala);
-        log.info("Sala ID: {} desactivada exitosamente.", id);
+
+        sala.setActivo(actualizarEstado);
+        log.info("Sala ID: {} actualizada exitosamente a estado: {}", id, actualizarEstado);
+        return repoSala.save(sala);
     }
 }

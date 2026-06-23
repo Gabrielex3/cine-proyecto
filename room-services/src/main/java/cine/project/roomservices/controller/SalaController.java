@@ -124,9 +124,9 @@ public class SalaController {
                     content = @Content
             )
     })
-    public ResponseEntity<String> desactivarSala(@PathVariable Long id) {
-        salaService.desactivarSala(id);
-        return ResponseEntity.ok("La sala con ID " + id + " ha sido desactivada correctamente.");
+    public ResponseEntity<String> actualizarSala(@PathVariable Long id,boolean actualizarEstado) {
+        salaService.desactivarSala(id,actualizarEstado);
+        return ResponseEntity.ok("La sala con ID " + id + " ha sido actualizada correctamente.");
     }
 
 }

@@ -28,7 +28,7 @@ public class ShowtimeService {
     private roomClient roomClient;
 
     @Transactional
-    public Showtime crearFuncion(ShowtimeRequestDTO dto) {
+    public Showtime createShowtime(ShowtimeRequestDTO dto) {
         log.info("Crear funcion: iniciando validaciones...");
 
         movieDTO pelicula = movieClient.obtenerPeliculaPorId(dto.getMovieId());
@@ -57,12 +57,12 @@ public class ShowtimeService {
         return funcionesList;
     }
 
-    public void deleteUser(Long id) {
-        log.info("Iniciando proceso de eliminación para el ID: {}", id);
+    public void deleteShowtime(Long id) {
+        log.info("Iniciando proceso de eliminación para la funcion con ID: {}", id);
 
         if (!showtimeRepository.existsById(id)) {
             log.error("Fallo al eliminar: El ID {} no existe", id);
-            throw new RuntimeException("No se puede eliminar: Usuario con ID " + id + " no existe");
+            throw new RuntimeException("No se puede eliminar: Funcion con ID " + id + " no existe");
         }
 
         try {
@@ -75,6 +75,7 @@ public class ShowtimeService {
     }
 
     public Showtime buscarPorId(Long id) {
+        log.info("Iniciando proceso de busqueda de funcion con ID: {}", id);
         return showtimeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("La función con ID " + id + " no existe."));
     }

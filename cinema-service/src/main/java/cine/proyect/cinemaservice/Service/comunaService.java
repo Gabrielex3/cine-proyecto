@@ -1,8 +1,6 @@
 package cine.proyect.cinemaservice.Service;
 
-import cine.proyect.cinemaservice.DTO.CinemaDTO;
 import cine.proyect.cinemaservice.DTO.comunasDTO;
-import cine.proyect.cinemaservice.Model.Cinema;
 import cine.proyect.cinemaservice.Model.comunas;
 import cine.proyect.cinemaservice.Repository.comunaRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -35,7 +32,7 @@ public class comunaService {
             comuna.setNombre(dto.getNombre());
 
             comunas comunaCreada = repo.save(comuna);
-            log.info("Sucursal creada exitosamente con ID: {}", comunaCreada.getId());
+            log.info("Comuna creada exitosamente con ID:{}  Nombre: {}", comunaCreada.getId(),comunaCreada.getNombre());
             return comunaCreada;
 
         } catch (Exception e) {
@@ -45,6 +42,7 @@ public class comunaService {
     }
 
     public comunas obtenerComunaPorId(Long id) {
+        log.info("Iniciando obtener comuna por id: {}", id);
         try {
             return repo.findById(id)
                     .orElseThrow(() -> new RuntimeException("Comuna no encontrada con ID: " + id));

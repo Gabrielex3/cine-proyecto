@@ -67,7 +67,7 @@ public class PaymentService {
                 log.info("Ticket generado exitosamente con ID: {}", ticketCreado.getId());
 
                 NotificationRequestDTO notifDto = new NotificationRequestDTO();
-                notifDto.setIdTicket(ticketCreado.getId()); // YA NO ES NULL
+                notifDto.setIdTicket(ticketCreado.getId());
                 notifDto.setIdUsuario(reserva.getUserId());
                 notifDto.setMensaje("¡Pago aprobado! Tu entrada es la #" + ticketCreado.getId());
                 notifDto.setTipo("TICKET_CONFIRMATION");

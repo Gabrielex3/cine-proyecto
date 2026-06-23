@@ -102,7 +102,7 @@ public class userController {
     public ResponseEntity<User> create(@Valid @RequestBody userDTO dto) {
         log.info("Crear: Creando nuevo usuario con RUT {}", dto.getRut());
         User nuevoUsuario = service.createUser(dto);
-        return new ResponseEntity<>(nuevoUsuario, HttpStatus.CREATED);
+        return new ResponseEntity<User>(nuevoUsuario, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -144,6 +144,7 @@ public class userController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "METODO DELETE USER", description = "Elimina un usuario existente mediante su ID.")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "204",

@@ -7,19 +7,19 @@ import cine.proyect.seatservice.Model.Asiento;
 import cine.proyect.seatservice.Repository.AsientoRepository;
 import feign.FeignException;
 import jakarta.transaction.Transactional;
-import jakarta.websocket.server.ServerEndpoint;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class AsientoService {
-    private final AsientoRepository asientoRepository;
-    private final SalaClient salaClient;
+    @Autowired
+    private AsientoRepository asientoRepository;
+    @Autowired
+    private SalaClient salaClient;
 
     public Asiento findAsientoById(Long id) {
         log.info("Buscando Asiento con ID: {}", id);

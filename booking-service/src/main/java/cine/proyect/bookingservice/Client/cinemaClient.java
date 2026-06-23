@@ -6,8 +6,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "cinema-service", url = "http://localhost:8087")
+@FeignClient(name = "cinema-service")
 public interface cinemaClient {
-    @GetMapping("/api/v1/cine/cinemas/{id}")
+
+    @GetMapping("/api/v2/cine/cinemas/{id}")
     cinemaDTO obtenerCinemaPorId(@PathVariable("id") Long id);
 }

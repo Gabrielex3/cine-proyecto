@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -41,6 +42,17 @@ public class comunaService {
             log.error("Error al guardar la comuna en la BD: {}", e.getMessage());
             throw new RuntimeException("Error interno al intentar crear la comuna");
         }
+    }
+
+    public comunas obtenerComunaPorId(Long id) {
+        try {
+            return repo.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Comuna no encontrada con ID: " + id));
+        }catch (Exception e){
+            log.error("Error al obtener la comuna con ID: {}", e.getMessage());
+            throw new RuntimeException("Error al obtener la comuna");
+        }
+
     }
 
     public comunas actualizarComuna(Long id, comunasDTO dto) {

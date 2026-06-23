@@ -5,9 +5,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "ticket-service", url = "http://localhost:8088")
+@FeignClient(name = "ticket-service")
 public interface TicketClient {
-    @PostMapping("/api/v1/cine/tickets")
+    @PostMapping("/api/v2/cine/tickets")
     TicketDTO crearTicket(@RequestBody TicketDTO dto);
     }
 

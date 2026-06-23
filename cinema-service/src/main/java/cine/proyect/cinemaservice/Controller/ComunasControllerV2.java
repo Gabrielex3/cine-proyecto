@@ -42,8 +42,8 @@ public class ComunasControllerV2 {
             @ApiResponse(responseCode = "200", description = "Operación exitosa", content = @Content(mediaType = MediaTypes.HAL_JSON_VALUE)),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor.", content = @Content)
     })
-    public CollectionModel<EntityModel<comunas>> listarComunas() {
-        List<EntityModel<comunas>> comunas = service.obtenerComunas().stream()
+    public CollectionModel<EntityModel<comunasDTO>> listarComunas() {
+        List<EntityModel<comunasDTO>> comunas = service.obtenerComunas().stream()
                 .map(assembler::toModel)
                 .collect(Collectors.toList());
 
@@ -58,7 +58,7 @@ public class ComunasControllerV2 {
             @ApiResponse(responseCode = "404", description = "Comuna no encontrada."),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor.")
     })
-    public EntityModel<comunas> obtenerComunaPorId(@PathVariable Long id) {
+    public EntityModel<comunasDTO> obtenerComunaPorId(@PathVariable Long id) {
         comunas comuna = service.obtenerComunaPorId(id);
         return assembler.toModel(comuna);
     }
@@ -71,9 +71,9 @@ public class ComunasControllerV2 {
             @ApiResponse(responseCode = "409", description = "Conflicto. Ya existe una comuna."),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor.")
     })
-    public ResponseEntity<EntityModel<comunas>> crearComuna(@Valid @RequestBody comunasDTO dto) {
+    public ResponseEntity<EntityModel<comunasDTO>> crearComuna(@Valid @RequestBody comunasDTO dto) {
         comunas nuevaComuna = service.crearComuna(dto);
-        EntityModel<comunas> entityModel = assembler.toModel(nuevaComuna);
+        EntityModel<comunasDTO> entityModel = assembler.toModel(nuevaComuna);
 
         return ResponseEntity
                 .created(linkTo(methodOn(ComunasControllerV2.class).obtenerComunaPorId(nuevaComuna.getId())).toUri())
@@ -89,7 +89,7 @@ public class ComunasControllerV2 {
             @ApiResponse(responseCode = "409", description = "Conflicto. Nombre ya en uso."),
             @ApiResponse(responseCode = "500", description = "Error interno.")
     })
-    public ResponseEntity<EntityModel<comunas>> actualizarComuna(@PathVariable Long id, @RequestBody comunasDTO dto) {
+    public ResponseEntity<EntityModel<comunasDTO>> actualizarComuna(@PathVariable Long id, @RequestBody comunasDTO dto) {
         comunas comunaActualizada = service.actualizarComuna(id, dto);
         return ResponseEntity.ok(assembler.toModel(comunaActualizada));
     }

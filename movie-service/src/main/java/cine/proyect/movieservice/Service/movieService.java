@@ -18,6 +18,8 @@ public class movieService {
 
     public List<Movie> getAllMovies(){
         log.info("Obteniendo todas las peliculas de la base de datos.");
+        List<Movie> peliculas = repo.findAll();
+        log.info("Consulta finalizada. Registros recuperados: {}", peliculas.size());
         return repo.findAll();
     }
 

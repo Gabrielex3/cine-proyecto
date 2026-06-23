@@ -90,6 +90,7 @@ public class PaymentService {
     }
 
     public Payment buscarPorId(Long id) {
+        log.info("Iniciando proceso de busqueda para Payment ID: {}", id);
         return paymentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("El pago con ID " + id + " no existe."));
     }

@@ -32,7 +32,6 @@ public class PaymentService {
     @Autowired
     notificationClient notificationClient;
 
-    @Transactional(rollbackFor = Exception.class)
     public Payment procesarPago(PaymentRequestDTO dto) {
         log.info("Iniciando proceso de pago para Reserva ID: {}", dto.getReservaId());
 
@@ -47,18 +46,22 @@ public class PaymentService {
         if (showtime == null) {
             throw new RuntimeException("Error: La función no existe.");
         }
+
         Payment payment = new Payment();
         payment.setReservaId(dto.getReservaId());
         payment.setMonto(dto.getMonto());
         payment.setTimestamp(LocalDateTime.now());
         boolean esExitoso = dto.getMonto().compareTo(showtime.getPrecioTicket()) >= 0;
+
         if (esExitoso) {
             payment.setEstado(PaymentStatus.APPROVED);
             payment = paymentRepository.save(payment);
-            log.info("Pago registrado internamente con ID: {}", payment.getId());
+            log.info("Pago registrado internamente y confirmado en BD con ID: {}", payment.getId());
+
             try {
                 reserva.setStatus("CONFIRMED");
                 bookingClient.actualizarStatus(reserva.getId(), reserva);
+
                 TicketDTO solicitudTicket = new TicketDTO();
                 solicitudTicket.setBookingId(reserva.getId());
                 solicitudTicket.setPaymentId(payment.getId());

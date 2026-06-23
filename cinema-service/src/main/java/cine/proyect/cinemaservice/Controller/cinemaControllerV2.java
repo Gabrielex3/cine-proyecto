@@ -45,7 +45,7 @@ public class cinemaControllerV2 {
     public CollectionModel<EntityModel<Cinema>> getAllCinemas() {
         log.info("REST request V2: Solicitando lista completa de sucursales");
 
-        List<EntityModel<Cinema>> cines = service.obtenerTodos().stream()
+        List<EntityModel<Cinema>> cines = service.getAllCinemas().stream()
                 .map(assembler::toModel)
                 .collect(Collectors.toList());
 

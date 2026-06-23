@@ -48,7 +48,7 @@ public class ControllerCinema {
     })
     public ResponseEntity<List<Cinema>> getAllCinemas() {
         log.info("REST request: Solicitando lista completa de sucursales");
-        return ResponseEntity.ok(service.obtenerTodos());
+        return ResponseEntity.ok(service.getAllCinemas());
     }
 
     @GetMapping("/{id}")

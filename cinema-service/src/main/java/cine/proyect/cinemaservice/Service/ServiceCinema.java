@@ -21,9 +21,11 @@ public class ServiceCinema {
     private comunaRepository crepo;
 
 
-    public List<Cinema> getAllCinemas() {
-        log.info("Consultando la lista de todas las sucursales");
-        return repo.findAll();
+    public List<Cinema> obtenerTodos() {
+        log.info("Iniciando consulta global de cinemas.");
+        List<Cinema> cinemas = repo.findAll();
+        log.info("Consulta finalizada. Registros recuperados: {}", cinemas.size());
+        return cinemas;
     }
 
 

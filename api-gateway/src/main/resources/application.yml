@@ -1,5 +1,6 @@
 server:
   port: 9000
+  forward-headers-strategy: framework
 
 spring:
   application:
@@ -9,19 +10,29 @@ spring:
     gateway:
       server:
         webflux:
+          forwarded:
+            enabled: true
+          default-filters:
+            - PreserveHostHeader
           routes:
             - id: user-service
               uri: lb://USER-SERVICE
               predicates:
                 - Path=/api/v2/cine/users/**
+              filters:
+                - PreserveHostHeader
             - id: cinema-service
               uri: lb://CINEMA-SERVICE
               predicates:
                 - Path=/api/v2/cine/cinemas/**
+              filters:
+                - PreserveHostHeader
             - id: comuna-service
               uri: lb://CINEMA-SERVICE
               predicates:
                 - Path=/api/v2/cine/comunas/**
+              filters:
+                - PreserveHostHeader
             - id: movie-service
               uri: lb://MOVIE-SERVICE
               predicates:

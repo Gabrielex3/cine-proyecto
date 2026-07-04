@@ -41,7 +41,7 @@ public class comunasServiceTest {
 
     @Test
     public void testCrearComuna() {
-        comunasDTO dto = new comunasDTO("Macul");
+        comunasDTO dto = new comunasDTO(1L,"Macul");
 
         comunas comunaGuardada = new comunas(1L,"Macul",new java.util.ArrayList<>());
 
@@ -70,7 +70,7 @@ public class comunasServiceTest {
     public void testActualizarComuna() {
         Long id = 1L;
 
-        comunasDTO dto = new comunasDTO("Providencia Editada");
+        comunasDTO dto = new comunasDTO(1L,"Providencia Editada");
 
         comunas existente = new comunas(1L,"Providencia",new java.util.ArrayList<>());
 

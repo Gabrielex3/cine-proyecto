@@ -51,6 +51,7 @@ services:
     build: ./user-service
     container_name: cine-user-service
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
@@ -66,6 +67,7 @@ services:
     build: ./cinema-service
     container_name: cine-cinema-service
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
@@ -81,6 +83,7 @@ services:
     build: ./movie-service
     container_name: cine-movie-service
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
@@ -96,6 +99,7 @@ services:
     build: ./ticket-service
     container_name: cine-ticket-service
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
@@ -111,6 +115,7 @@ services:
     build: ./showtime-service
     container_name: cine-showtime-service
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
@@ -126,6 +131,7 @@ services:
     build: ./seat-service
     container_name: cine-seat-service
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
@@ -141,6 +147,7 @@ services:
     build: ./room-services
     container_name: cine-room-service
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
@@ -156,6 +163,7 @@ services:
     build: ./payment-service
     container_name: cine-payment-service
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
@@ -171,6 +179,7 @@ services:
     build: ./notification-service
     container_name: cine-notification-service
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:
@@ -186,6 +195,7 @@ services:
     build: ./booking-service
     container_name: cine-booking-service
     environment:
+      - SPRING_PROFILES_ACTIVE=docker
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://cine-eureka-server:8761/eureka/
     restart: on-failure
     depends_on:

@@ -37,7 +37,7 @@ public class cinemaServiceTest {
 
         when(repo.findAll()).thenReturn(List.of(cine));
 
-        List<Cinema> cinemas = service.obtenerTodos();
+        List<Cinema> cinemas = service.getAllCinemas();
 
         assertFalse(cinemas.isEmpty());
     }

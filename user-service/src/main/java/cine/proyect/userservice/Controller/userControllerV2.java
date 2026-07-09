@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,5 +111,18 @@ public class userControllerV2 {
         log.info("Eliminar V2: Eliminando usuario con ID {}", id);
         service.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/debug")
+    public String debug(HttpServletRequest request) {
+        return """
+    serverName = %s
+    forwardedHost = %s
+    forwardedProto = %s
+    """.formatted(
+                request.getServerName(),
+                request.getHeader("X-Forwarded-Host"),
+                request.getHeader("X-Forwarded-Proto")
+        );
     }
 }

@@ -26,4 +26,7 @@ public class Movie {
     @Column(nullable = false)
     private Integer duracion;
 
+    @Column(nullable = false)
+    private String imagen;
+
 }

@@ -12,4 +12,5 @@ public class movieDTO {
     private String titulo;
     private String genero;
     private Integer duracion;
+    private String imagen;
 }

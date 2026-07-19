@@ -1,5 +1,7 @@
 package cine.proyect.userservice.Controller;
 
+import cine.proyect.userservice.DTO.CambiarDTO;
+import cine.proyect.userservice.DTO.LoginRequestDTO;
 import cine.proyect.userservice.DTO.userDTO;
 import cine.proyect.userservice.Model.User;
 import cine.proyect.userservice.Service.userService;
@@ -16,10 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -113,16 +117,32 @@ public class userControllerV2 {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/debug")
-    public String debug(HttpServletRequest request) {
-        return """
-    serverName = %s
-    forwardedHost = %s
-    forwardedProto = %s
-    """.formatted(
-                request.getServerName(),
-                request.getHeader("X-Forwarded-Host"),
-                request.getHeader("X-Forwarded-Proto")
-        );
+
+    @PostMapping("/login")
+    public ResponseEntity<?> iniciarSesion(@RequestBody LoginRequestDTO loginRequest) {
+
+        Optional<User> usuarioOpt = service.findUserByCorreo(loginRequest.getCorreo());
+
+        if (usuarioOpt.isPresent()) {
+            User usuario = usuarioOpt.get();
+
+            if (usuario.getContrasena().equals(loginRequest.getContrasena())) {
+                return ResponseEntity.ok(usuario);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Correo o contraseña incorrectos");
     }
+
+    @PutMapping("/{id}/password")
+    public ResponseEntity<?> cambiarContrasena(@PathVariable Long id, @RequestBody CambiarDTO request) {
+
+        boolean exito = service.cambiarContrasena(id, request.getNuevaContrasena());
+
+        if (exito) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

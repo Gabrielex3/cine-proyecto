@@ -1,5 +1,6 @@
 package cine.proyect.userservice.Service;
 
+import cine.proyect.userservice.DTO.LoginRequestDTO;
 import cine.proyect.userservice.DTO.userDTO;
 import cine.proyect.userservice.Model.User;
 import cine.proyect.userservice.Repository.userRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -37,6 +39,7 @@ public class userService {
             user.setNombre(dto.getNombre());
             user.setApellido(dto.getApellido());
             user.setCorreo(dto.getCorreo());
+            user.setContrasena(dto.getContrasena());
             user.setTelefono(dto.getTelefono());
 
             User guardado = repo.save(user);
@@ -54,6 +57,11 @@ public class userService {
             log.error("Fallo de búsqueda: No existe el usuario con ID {}", id);
             return new RuntimeException("Usuario no encontrado con ID: " + id);
         });
+    }
+
+    public Optional<User> findUserByCorreo(String correo) {
+        log.info("Buscando usuario para login con correo: {}", correo);
+        return repo.findByCorreo(correo);
     }
 
     public User updateUser(Long id, userDTO dto) {
@@ -97,5 +105,21 @@ public class userService {
             log.error("Error al eliminar el usuario ID {}: {}", id, e.getMessage());
             throw new RuntimeException("Error al intentar borrar el registro de la base de datos.");
         }
+    }
+
+    public boolean cambiarContrasena(Long id, String nuevaContrasena) {
+        log.info("Actualizando contraseña para el usuario con ID: {}", id);
+
+        Optional<User> usuarioOpt = repo.findById(id);
+
+        if (usuarioOpt.isPresent()) {
+            User usuario = usuarioOpt.get();
+            usuario.setContrasena(nuevaContrasena);
+            repo.save(usuario);
+            return true;
+        }
+
+        log.warn("No se encontró el usuario con ID: {}", id);
+        return false;
     }
 }

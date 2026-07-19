@@ -1,6 +1,7 @@
 package cine.proyect.userservice.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,9 @@ public class User {
 
     @Column(unique = true, nullable = false, name = "CORREO")
     private String correo;
+
+    @NotBlank(message = "La contraseña es obligatoria")
+    private String contrasena;
 
     @Column(unique = true, nullable = false, name = "TELEFONO")
     private String telefono;

@@ -22,4 +22,6 @@ public class MovieDTO {
     @NotNull(message = "La duracion es obligatoria!")
     @Min(value = 1, message = "La duracion debe ser mayor a 0 minutos")
     private Integer duracion;
+    @NotNull(message = "La imagen es obligatoria!")
+    private String imagen;
 }

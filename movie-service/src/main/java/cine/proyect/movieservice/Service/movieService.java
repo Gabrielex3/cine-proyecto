@@ -38,6 +38,7 @@ public class movieService {
             movie.setTitulo(dto.getTitulo());
             movie.setGenero(dto.getGenero());
             movie.setDuracion(dto.getDuracion());
+            movie.setImagen(dto.getImagen());
 
             Movie savedMovie = repo.save(movie);
             log.info("Pelicula creada exitosamente con ID: {}", savedMovie.getId());
@@ -57,6 +58,7 @@ public class movieService {
             existingMovie.setTitulo(dto.getTitulo());
             existingMovie.setGenero(dto.getGenero());
             existingMovie.setDuracion(dto.getDuracion());
+            existingMovie.setImagen(dto.getImagen());
 
             Movie updateMovie = repo.save(existingMovie);
             log.info("Pelicula con ID: {} actualizada exitosamente!", updateMovie.getId());
